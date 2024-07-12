@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:3000/contacts';
+const mongoURI =
+  process.env.MONGODB_URI || 'mongodb://cluster0.mongodb.net:3000/contacts';
 
 async function initMongoConnection() {
   try {
@@ -13,4 +14,4 @@ async function initMongoConnection() {
   }
 }
 
-module.exports = initMongoConnection;
+module.exports = { initMongoConnection };
