@@ -22,5 +22,15 @@ const getContacts = async (req, res) => {
     });
   }
 };
+const getContactById = (req, res) => {
+  const { id } = req.params;
+
+  const contact = contacts.find((contact) => contact.id === id);
+  if (contact) {
+    res.status(200).json(contact);
+  } else {
+    res.status(404).json({ message: 'Contact not found' });
+  }
+};
 
 module.exports = { getContacts, getContactById };
