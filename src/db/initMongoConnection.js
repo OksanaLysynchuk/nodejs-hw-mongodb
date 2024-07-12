@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoURI =
-  process.env.MONGODB_URI || 'mongodb://cluster0.mongodb.net:3000/contacts';
+  process.env.MONGODB_URI ||
+  'mongodb://oksanalysynchuk:ciev0OCuaSdMcnWY@cluster0.mongodb.net:3000/contacts';
 
 async function initMongoConnection() {
   try {
