@@ -1,18 +1,21 @@
 const mongoose = require('mongoose');
-const mongoURI =
-  process.env.MONGODB_URI ||
-  'mongodb://oksanalysynchuk:ciev0OCuaSdMcnWY@cluster0.mongodb.net:3000/contacts';
+require('dotenv').config();
 
-async function initMongoConnection() {
+const initMongoConnection = async () => {
+  const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB } =
+    process.env;
+  const connectionString = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/${MONGODB_DB}?retryWrites=true&w=majority`;
+
   try {
-    await mongoose.connect(mongoURI, {
+    await mongoose.connect(connectionString, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
     console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('Error connecting to MongoDB', error);
+    process.exit(1);
   }
-}
+};
 
-module.exports = { initMongoConnection };
+module.exports = initMongoConnection;
