@@ -1,36 +1,28 @@
-const Contact = require('../models/contact');
+const Contact = require('../db/models/contactModel');
 
 const getContacts = async (req, res) => {
-  const { contactId } = req.params;
   try {
-    const contact = await Contact.findById(contactId);
-
-    if (!contact) {
-      return res.status(404).json({
-        message: 'Contact not found',
-      });
-    }
-
-    res.json({
-      status: 200,
-      message: `Successfully found contact with id ${contactId}!`,
-      data: contact,
-    });
+    const contacts = await Contact.find();
+    res.status(200).json({ status: 'success', data: contacts });
   } catch (error) {
-    res.status(500).json({
-      message: 'Server error',
-    });
-  }
-};
-const getContactById = (req, res) => {
-  const { id } = req.params;
-
-  const contact = contacts.find((contact) => contact.id === id);
-  if (contact) {
-    res.status(200).json(contact);
-  } else {
-    res.status(404).json({ message: 'Contact not found' });
+    res.status(500).json({ status: 'error', message: error.message });
   }
 };
 
-module.exports = { getContacts, getContactById };
+const getContactById = async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.contactId);
+    if (contact) {
+      res.status(200).json({ status: 'success', data: contact });
+    } else {
+      res.status(404).json({ status: 'error', message: 'Contact not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ status: 'error', message: error.message });
+  }
+};
+
+module.exports = {
+  getContacts,
+  getContactById,
+};
