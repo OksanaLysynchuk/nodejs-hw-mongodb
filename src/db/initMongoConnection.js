@@ -2,12 +2,10 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const initMongoConnection = async () => {
-  const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB } =
-    process.env;
-  const connectionString = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/${MONGODB_DB}?retryWrites=true&w=majority`;
+  const { MONGODB_URL } = process.env;
 
   try {
-    await mongoose.connect(connectionString, {
+    await mongoose.connect(MONGODB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
