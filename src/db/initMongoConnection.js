@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { env } from '../utils/env.js';
 
 const initMongoConnection = async () => {
   try {
@@ -13,10 +11,9 @@ const initMongoConnection = async () => {
     await mongoose.connect(
       `mongodb+srv://${user}:${pwd}@${url}/${db}?retryWrites=true&w=majority`,
     );
-    console.log('MongoDB connected successfully');
+    console.log('Mongo connection successfully established!');
   } catch (error) {
-    console.error('Error connecting to MongoDB', error);
-    throw error;
+    console.error('Error connecting to MongoDB:', error);
   }
 };
 

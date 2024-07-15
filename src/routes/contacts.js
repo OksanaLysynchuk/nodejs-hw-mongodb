@@ -1,12 +1,16 @@
-import express from 'express';
-import {
-  getContacts,
+import Contact from '../db/models/contactModel.js';
+
+const getAllContacts = async () => {
+  const contacts = await Contact.find({});
+  return contacts;
+};
+
+const getContactById = async (id) => {
+  const contact = await Contact.findById(id);
+  return contact;
+};
+
+export default {
+  getAllContacts,
   getContactById,
-} from '../controllers/contactsController.js';
-
-const router = express.Router();
-
-router.get('/', getContacts);
-router.get('/:contactId', getContactById);
-
-export default router;
+};
