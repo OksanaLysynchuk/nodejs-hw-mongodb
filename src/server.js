@@ -11,18 +11,18 @@ const setupServer = () => {
   const app = express();
   const logger = pino();
 
+  app.use(cors());
   app.use(
     helmet({
       contentSecurityPolicy: {
         directives: {
-          defaultSrc: ["'none'"],
+          defaultSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
           fontSrc: ["'self'", 'https://nodejs-hw-mongodb-2g2p.onrender.com'],
         },
       },
     }),
   );
-
-  app.use(cors());
   app.use((req, res, next) => {
     logger.info(`${req.method} ${req.url}`);
     next();
