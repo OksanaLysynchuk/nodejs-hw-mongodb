@@ -1,11 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const pino = require('pino');
-const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
-const {
+import express from 'express';
+import cors from 'cors';
+import pino from 'pino';
+import {
   getContacts,
   getContactById,
-} = require('./controllers/contactsController');
+} from './controllers/contactsController.js';
+
+const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 
 const setupServer = () => {
   const app = express();
@@ -21,7 +22,7 @@ const setupServer = () => {
   });
 
   app.use((req, res, next) => {
-    res.status(404).json({ message: 'Not found' });
+    res.status(404).json({ message: 'Not Found' });
   });
 
   const PORT = process.env.PORT || 3000;
@@ -30,4 +31,4 @@ const setupServer = () => {
   });
 };
 
-module.exports = { setupServer };
+export default setupServer;
