@@ -1,13 +1,9 @@
-import dotenv from 'dotenv';
-import initMongoConnection from './db/initMongoConnection.js';
 import setupServer from './server.js';
+import initMongoConnection from './db/initMongoConnection.js';
 
-dotenv.config();
+const startApp = async () => {
+  await initMongoConnection();
+  setupServer();
+};
 
-initMongoConnection()
-  .then(() => {
-    setupServer();
-  })
-  .catch((error) => {
-    console.error('Failed to initialize server:', error);
-  });
+startApp();
