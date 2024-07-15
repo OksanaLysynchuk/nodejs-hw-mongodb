@@ -3,12 +3,24 @@ import cors from 'cors';
 import pino from 'pino';
 import contactsService from './routes/contacts.js';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
 
 dotenv.config();
 
 const setupServer = () => {
   const app = express();
   const logger = pino();
+
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'none'"],
+          fontSrc: ["'self'", 'https://nodejs-hw-mongodb-2g2p.onrender.com'],
+        },
+      },
+    }),
+  );
 
   app.use(cors());
   app.use((req, res, next) => {
