@@ -1,17 +1,16 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+import initMongoConnection from './db/initMongoConnection.js';
+import setupServer from './server.js';
 
-const express = require('express');
-const initMongoConnection = require('./db/initMongoConnection');
+dotenv.config();
 
-const app = express();
-const { PORT, MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB } =
+const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB, PORT } =
   process.env;
 
-initMongoConnection();
-
-app.use(express.json());
-app.use('/contacts', require('./routes/contacts'));
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+initMongoConnection()
+  .then(() => {
+    setupServer();
+  })
+  .catch((error) => {
+    console.error('Failed to initialize server:', error);
+  });

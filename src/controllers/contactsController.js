@@ -1,6 +1,6 @@
-const Contact = require('../db/models/contactModel');
+import Contact from '../db/models/contactModel.js';
 
-const getContacts = async (req, res) => {
+export const getContacts = async (req, res) => {
   try {
     const contacts = await Contact.find();
     res.status(200).json({ status: 'success', data: contacts });
@@ -9,7 +9,7 @@ const getContacts = async (req, res) => {
   }
 };
 
-const getContactById = async (req, res) => {
+export const getContactById = async (req, res) => {
   try {
     const contact = await Contact.findById(req.params.contactId);
     if (contact) {
@@ -20,9 +20,4 @@ const getContactById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ status: 'error', message: error.message });
   }
-};
-
-module.exports = {
-  getContacts,
-  getContactById,
 };
