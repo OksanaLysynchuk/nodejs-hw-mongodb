@@ -6,6 +6,11 @@ dotenv.config();
 const initMongoConnection = async () => {
   const { MONGODB_URL } = process.env;
 
+  if (!MONGODB_URL) {
+    console.error('MONGODB_URL is not defined');
+    process.exit(1);
+  }
+
   try {
     await mongoose.connect(MONGODB_URL, {
       useNewUrlParser: true,
