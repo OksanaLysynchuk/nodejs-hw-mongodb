@@ -10,6 +10,12 @@ const initMongoConnection = async () => {
 
     await mongoose.connect(
       `mongodb+srv://${user}:${pwd}@${url}/${db}?retryWrites=true&w=majority`,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true,
+      },
     );
     console.log('Mongo connection successfully established!');
   } catch (error) {
