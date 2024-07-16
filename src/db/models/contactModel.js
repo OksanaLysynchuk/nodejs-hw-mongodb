@@ -24,6 +24,10 @@ const contactSchema = new mongoose.Schema(
       required: true,
       default: 'personal',
     },
+    isFavourite: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
