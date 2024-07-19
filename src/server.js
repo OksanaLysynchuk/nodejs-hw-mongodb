@@ -5,15 +5,13 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import contacts from './routers/contacts.js';
 
 dotenv.config();
 
 const setupServer = () => {
   const app = express();
   const logger = pino();
-
-  app.use(errorHandler);
-  app.use(notFoundHandler);
 
   app.use(cors());
   app.use(
@@ -31,6 +29,11 @@ const setupServer = () => {
     logger.info(`${req.method} ${req.url}`);
     next();
   });
+
+  app.use('/api', contacts);
+
+  app.use(errorHandler);
+  app.use(notFoundHandler);
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
