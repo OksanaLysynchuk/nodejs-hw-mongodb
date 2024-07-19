@@ -10,7 +10,7 @@ const contactSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Email is required'],
     },
-    phone: {
+    phoneNumber: {
       type: String,
       required: [true, 'Phone is required'],
     },
