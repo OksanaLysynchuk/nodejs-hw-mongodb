@@ -30,6 +30,7 @@ const setupServer = () => {
     next();
   });
 
+  app.use(express.json());
   app.use('/api', contacts);
 
   app.use(errorHandler);
