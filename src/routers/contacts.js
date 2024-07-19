@@ -16,6 +16,12 @@ router.get('/contacts/:contactId', ctrlWrapper(getContactById));
 
 router.post('/contacts', ctrlWrapper(createContact));
 
-router.patch('/contact/:contactId', ctrlWrapper(changeContact));
+router.patch(
+  '/contact/:contactId/patchedContact',
+  jsonParser,
+  ctrlWrapper(changeContact),
+);
 
 router.delete('/contacts/:contactId', ctrlWrapper(deleteContact));
+
+export default router;
