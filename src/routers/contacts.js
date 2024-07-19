@@ -17,7 +17,7 @@ router.get('/contacts/:contactId', ctrlWrapper(getContactById));
 router.post('/contacts', ctrlWrapper(createContact));
 
 router.patch(
-  '/contact/:contactId/patchedContact',
+  '/contact/:contactId/contactData',
   jsonParser,
   ctrlWrapper(changeContact),
 );

@@ -4,8 +4,8 @@ export const getContacts = () => {
   return Contact.find();
 };
 
-export const getContactById = () => {
-  return Contact.findById();
+export const getContactById = (contactId) => {
+  return Contact.findById(contactId);
 };
 
 export const createContact = (contact) => {
@@ -13,11 +13,7 @@ export const createContact = (contact) => {
 };
 
 export const changeContact = (contactId, patchedContact) => {
-  return Contact.findByIdAndUpdate(
-    contactId,
-    { contactData: patchedContact },
-    { new: true },
-  );
+  return Contact.findByIdAndUpdate(contactId, patchedContact, { new: true });
 };
 
 export const deleteContact = (contactId) => {
