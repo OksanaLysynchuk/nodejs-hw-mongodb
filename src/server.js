@@ -31,7 +31,7 @@ const setupServer = () => {
   });
 
   app.use(express.json());
-  app.use('/api', contacts);
+  app.use('/contacts', contacts);
 
   app.use(errorHandler);
   app.use(notFoundHandler);
