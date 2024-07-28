@@ -26,11 +26,25 @@ const parseSortOrder = (sortOrder) => {
   return SORT_ORDER.ASC;
 };
 
+// export const parseSortParams = (query) => {
+//   const { sortBy, sortOrder } = query;
+
+//   const parsedSortBy = parseSortBy(sortBy);
+//   const parsedSortOrder = parseSortOrder(sortOrder);
+
+//   return {
+//     sortBy: parsedSortBy,
+//     sortOrder: parsedSortOrder,
+//   };
+// };
+
 export const parseSortParams = (query) => {
   const { sortBy, sortOrder } = query;
 
   const parsedSortBy = parseSortBy(sortBy);
   const parsedSortOrder = parseSortOrder(sortOrder);
+
+  console.log(`Parsed sortBy: ${parsedSortBy}, sortOrder: ${parsedSortOrder}`);
 
   return {
     sortBy: parsedSortBy,
