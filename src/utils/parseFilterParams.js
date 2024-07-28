@@ -13,13 +13,13 @@ const parseNumber = (number) => {
 };
 
 export const parseFilterParams = (query) => {
-  const { type, isFavorite } = query;
+  const { type, isFavourite } = query;
 
   const parsedType = parseNumber(type);
-  const parsedIsFavorite = parseNumber(isFavorite);
+  const parsedIsFavourite = parseNumber(isFavourite);
 
   return {
     type: parsedType,
-    isFavorite: parsedIsFavorite,
+    isFavourite: parsedIsFavourite,
   };
 };
