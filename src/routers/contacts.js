@@ -7,10 +7,7 @@ import {
   deleteContact,
 } from '../controllers/contactsController.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import {
-  contactValidSchema,
-  contactPatchSchema,
-} from '../validations/contactsValidation.js';
+import { contactValidSchema } from '../validations/contactsValidation.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
 
@@ -31,7 +28,7 @@ router.patch(
   '/contacts/:contactId',
   jsonParser,
   isValidId,
-  validateBody(contactPatchSchema),
+  validateBody(contactValidSchema),
   ctrlWrapper(changeContact),
 );
 
