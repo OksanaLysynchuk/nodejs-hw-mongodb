@@ -1,4 +1,5 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import pino from 'pino';
 import dotenv from 'dotenv';
@@ -6,12 +7,15 @@ import helmet from 'helmet';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import contacts from './routers/contacts.js';
+import authRouters from './routers/auth.js';
 
 dotenv.config();
 
 const setupServer = () => {
   const app = express();
   const logger = pino();
+
+  app.use(cookieParser());
 
   app.use(cors());
   app.use(
@@ -31,6 +35,7 @@ const setupServer = () => {
   });
 
   app.use(express.json());
+  app.use('/auth', authRouters);
   app.use('/', contacts);
 
   app.use(errorHandler);

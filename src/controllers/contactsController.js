@@ -16,6 +16,7 @@ export const getContacts = async (req, res) => {
     sortBy,
     sortOrder,
     filter,
+    userId: req.user._id,
   });
 
   res.send({
@@ -29,9 +30,16 @@ export const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
-    const contact = await contactsService.getContactById(contactId);
+    const contact = await contactsService.getContactById(
+      contactId,
+      req.user._id,
+    );
     if (!contact) {
       return next(createHttpError(404, 'Contact not found'));
+    }
+
+    if (contact.userId.toString() !== req.user._id.toString()) {
+      return next(createHttpError(403, 'Contact not allowed'));
     }
     res.send({
       status: 200,
@@ -50,6 +58,7 @@ export const createContact = async (req, res, next) => {
     email: req.body.email,
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
+    userId: req.user._id,
   };
 
   try {
@@ -74,8 +83,12 @@ export const changeContact = async (req, res, next) => {
     const patchedContact = await contactsService.changeContact(
       contactId,
       contactData,
+      req.user._id,
     );
-    if (!patchedContact) {
+    if (
+      !patchedContact ||
+      patchedContact.userId.toString() !== req.user._id.toString()
+    ) {
       return next(createHttpError(404, 'Contact not found'));
     }
     res.status(200).send({
@@ -92,9 +105,15 @@ export const deleteContact = async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
-    const deletedContact = await contactsService.deleteContact(contactId);
+    const deletedContact = await contactsService.deleteContact(
+      contactId,
+      req.user._id,
+    );
 
-    if (!deletedContact) {
+    if (
+      !deletedContact ||
+      deleteContact.userId.toString() !== req.user._id.toString()
+    ) {
       return next(createHttpError(404, 'Contact not found'));
     }
 
