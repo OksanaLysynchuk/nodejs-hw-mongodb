@@ -6,6 +6,7 @@ const sessionsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       unique: true,
+      ref: 'User',
     },
     accessToken: { type: String, required: true },
     refreshToken: { type: String, required: true },
