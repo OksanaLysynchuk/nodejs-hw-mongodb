@@ -45,34 +45,62 @@ export const logout = async (req, res) => {
     await UserServices.logoutUser(req.cookies.sessionId);
   }
 
-  res.clearCookie('refreshToken');
   res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
 
   res.status(204).end();
 };
 
-export const refresh = async (req, res) => {
-  const session = await UserServices.refreshUserSession(
-    req.cookies.sessionId,
-    req.cookies.refreshToken,
-  );
+// export const refresh = async (req, res) => {
+//   const session = await UserServices.refreshUserSession(
+//     req.cookies.sessionId,
+//     req.cookies.refreshToken,
+//   );
 
+//   res.cookie('refreshToken', session.refreshToken, {
+//     httpOnly: true,
+//     expires: session.refreshTokenValidUntil,
+//   });
+
+//   res.cookie('sessionId', session._id, {
+//     httpOnly: true,
+//     expires: session.refreshTokenValidUntil,
+//   });
+
+//   res.send({
+//     status: 200,
+//     message: 'Successfully refreshed a session!',
+//     data: {
+//       accessToken: session.accessToken,
+//     },
+//   });
+//   res.send();
+// };
+
+const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: session.refreshTokenValidUntil,
+    expires: new Date(Date.now() + ONE_DAY),
   });
-
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expires: session.refreshTokenValidUntil,
+    expires: new Date(Date.now() + ONE_DAY),
+  });
+};
+
+export const refresh = async (req, res) => {
+  const session = await refreshUserSession({
+    sessionId: req.cookies.sessionId,
+    refreshToken: req.cookies.refreshToken,
   });
 
-  res.send({
+  setupSession(res, session);
+
+  res.json({
     status: 200,
     message: 'Successfully refreshed a session!',
     data: {
       accessToken: session.accessToken,
     },
   });
-  res.send();
 };
