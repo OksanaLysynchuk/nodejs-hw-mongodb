@@ -15,8 +15,6 @@ const setupServer = () => {
   const app = express();
   const logger = pino();
 
-  app.use(cookieParser());
-
   app.use(cors());
   app.use(
     helmet({
@@ -35,6 +33,7 @@ const setupServer = () => {
   });
 
   app.use(express.json());
+  app.use(cookieParser());
   app.use('/auth', authRouters);
   app.use('/', contacts);
 

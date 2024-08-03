@@ -10,7 +10,6 @@ const jsonParser = express.json();
 
 router.post(
   '/auth/register',
-  authenticate,
   jsonParser,
   validateBody(registerSchema),
   ctrlWrapper(register),
@@ -18,14 +17,13 @@ router.post(
 
 router.post(
   '/auth/login',
-  authenticate,
   jsonParser,
   validateBody(loginSchema),
   ctrlWrapper(login),
 );
 
-router.post('/auth/logout', authenticate, ctrlWrapper(logout));
+router.post('/auth/logout', ctrlWrapper(logout));
 
-router.post('/auth/refresh', authenticate, ctrlWrapper(refresh));
+router.post('/auth/refresh', jsonParser, ctrlWrapper(refresh));
 
 export default router;
