@@ -110,15 +110,19 @@ export const deleteContact = async (req, res, next) => {
       req.user._id,
     );
 
+    console.log('Deleted Contact:', deletedContact);
+    console.log('User ID:', req.user._id);
+
     if (
       !deletedContact ||
-      deleteContact.userId.toString() !== req.user._id.toString()
+      deletedContact.userId.toString() !== req.user._id.toString()
     ) {
       return next(createHttpError(404, 'Contact not found'));
     }
 
     res.status(204).send();
   } catch (error) {
+    console.error('Error:', error);
     next(createHttpError(500, error.message));
   }
 };

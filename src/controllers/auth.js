@@ -9,7 +9,7 @@ export const register = async (req, res) => {
 
   const newUser = await UserServices.createUser(user);
 
-  res.send({
+  res.status(201).json({
     status: 201,
     message: 'Successfully registered a user',
     data: newUser,
@@ -31,7 +31,7 @@ export const login = async (req, res) => {
     expires: session.refreshTokenValidUntil,
   });
 
-  res.send({
+  res.status(200).json({
     status: 200,
     message: 'Successfully logged in an user!',
     data: {
@@ -50,32 +50,6 @@ export const logout = async (req, res) => {
 
   res.status(204).end();
 };
-
-// export const refresh = async (req, res) => {
-//   const session = await UserServices.refreshUserSession(
-//     req.cookies.sessionId,
-//     req.cookies.refreshToken,
-//   );
-
-//   res.cookie('refreshToken', session.refreshToken, {
-//     httpOnly: true,
-//     expires: session.refreshTokenValidUntil,
-//   });
-
-//   res.cookie('sessionId', session._id, {
-//     httpOnly: true,
-//     expires: session.refreshTokenValidUntil,
-//   });
-
-//   res.send({
-//     status: 200,
-//     message: 'Successfully refreshed a session!',
-//     data: {
-//       accessToken: session.accessToken,
-//     },
-//   });
-//   res.send();
-// };
 
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
@@ -96,7 +70,7 @@ export const refresh = async (req, res) => {
 
   setupSession(res, session);
 
-  res.json({
+  res.status(200).json({
     status: 200,
     message: 'Successfully refreshed a session!',
     data: {
