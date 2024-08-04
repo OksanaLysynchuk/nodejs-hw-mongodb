@@ -51,11 +51,6 @@ export const logout = async (req, res) => {
   res.status(204).end();
 };
 
-<<<<<<< HEAD:src/controllers/authController.js
-=======
-
-
->>>>>>> ebf50995590a30a5fe27c2c63175435d2bfb6bc9:src/controllers/auth.js
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,

@@ -48,11 +48,6 @@ export const logoutUser = async (sessionId) => {
   return await Session.deleteOne({ _id: sessionId });
 };
 
-<<<<<<< HEAD:src/services/authServices.js
-=======
-
-
->>>>>>> ebf50995590a30a5fe27c2c63175435d2bfb6bc9:src/services/auth.js
 const createSession = () => {
   const accessToken = crypto.randomBytes(30).toString('base64');
   const refreshToken = crypto.randomBytes(30).toString('base64');
