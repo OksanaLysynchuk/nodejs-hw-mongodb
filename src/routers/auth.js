@@ -1,6 +1,11 @@
 import express from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { register, login, logout, refresh } from '../controllers/auth.js';
+import {
+  register,
+  login,
+  logout,
+  refresh,
+} from '../controllers/authController.js';
 import { registerSchema, loginSchema } from '../validations/authValidation.js';
 import { validateBody } from '../middlewares/validateBody.js';
 
