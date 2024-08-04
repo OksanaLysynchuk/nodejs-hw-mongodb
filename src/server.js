@@ -1,5 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import pino from 'pino';
 import dotenv from 'dotenv';
@@ -33,6 +34,8 @@ const setupServer = () => {
   });
 
   app.use(express.json());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use('/auth', authRouters);
   app.use('/', contacts);

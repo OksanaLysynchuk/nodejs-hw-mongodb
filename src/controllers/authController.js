@@ -1,4 +1,4 @@
-import * as UserServices from '../services/auth.js';
+import * as UserServices from '../services/authServices.js';
 
 export const register = async (req, res) => {
   const user = {
@@ -9,7 +9,7 @@ export const register = async (req, res) => {
 
   const newUser = await UserServices.createUser(user);
 
-  res.send({
+  res.status(201).json({
     status: 201,
     message: 'Successfully registered a user',
     data: newUser,
@@ -31,7 +31,7 @@ export const login = async (req, res) => {
     expires: session.refreshTokenValidUntil,
   });
 
-  res.send({
+  res.status(200).json({
     status: 200,
     message: 'Successfully logged in an user!',
     data: {
@@ -51,8 +51,11 @@ export const logout = async (req, res) => {
   res.status(204).end();
 };
 
+<<<<<<< HEAD:src/controllers/authController.js
+=======
 
 
+>>>>>>> ebf50995590a30a5fe27c2c63175435d2bfb6bc9:src/controllers/auth.js
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
@@ -72,7 +75,7 @@ export const refresh = async (req, res) => {
 
   setupSession(res, session);
 
-  res.json({
+  res.status(200).json({
     status: 200,
     message: 'Successfully refreshed a session!',
     data: {
