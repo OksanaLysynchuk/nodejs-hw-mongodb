@@ -120,7 +120,7 @@ export const deleteContact = async (req, res, next) => {
       return next(createHttpError(404, 'Contact not found'));
     }
 
-    res.status(204).send();
+    res.status(204).end();
   } catch (error) {
     console.error('Error:', error);
     next(createHttpError(500, error.message));
