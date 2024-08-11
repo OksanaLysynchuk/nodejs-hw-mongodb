@@ -55,9 +55,14 @@ export const createContact = (contact) => {
 };
 
 export const changeContact = (contactId, patchedContact, userId) => {
-  return Contact.findOneAndUpdate({ _id: contactId, userId }, patchedContact, {
-    new: true,
-  });
+  return Contact.findByIdAndUpdate(
+    { _id: contactId, userId },
+    { photoUrl: photo },
+    patchedContact,
+    {
+      new: true,
+    },
+  );
 };
 
 export const deleteContact = (contactId, userId) => {

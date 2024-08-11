@@ -4,6 +4,10 @@ import { contactValidSchema } from '../validations/contactsValidation.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { env } from '../utils/env.js';
+import * as fs from 'node:fs/promises';
+import { error, log } from 'node:console';
 
 export const getContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -76,6 +80,36 @@ export const createContact = async (req, res, next) => {
 
 export const changeContact = async (req, res, next) => {
   const { contactId } = req.params;
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+  try {
+    const result = await contactsService.changeContact(contactId, {
+      ...req.body,
+      photo: photoUrl,
+    });
+
+    if (!result) {
+      next(createHttpError(404, 'Contact not found'));
+      return;
+    }
+    res.json({
+      status: 200,
+      message: `Successfully changed photo`,
+      data: result,
+    });
+  } catch (error) {
+    next(createHttpError(500, error.message));
+  }
 
   const contactData = req.body;
 
@@ -91,7 +125,7 @@ export const changeContact = async (req, res, next) => {
     ) {
       return next(createHttpError(404, 'Contact not found'));
     }
-    res.status(200).send({
+    res.status(200).json({
       status: 200,
       message: 'Successfully patched a contact!',
       data: patchedContact,
