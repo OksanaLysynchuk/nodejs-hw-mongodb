@@ -11,28 +11,31 @@ import { contactValidSchema } from '../validations/contactsValidation.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/multer.js';
 
 const router = express.Router();
 const jsonParser = express.json();
 
-router.get('/contacts', authenticate, ctrlWrapper(getContacts));
-router.get(
-  '/contacts/:contactId',
-  authenticate,
-  isValidId,
-  ctrlWrapper(getContactById),
-);
+router.get('/', authenticate, ctrlWrapper(getContacts));
+router.get('/:contactId', authenticate, isValidId, ctrlWrapper(getContactById));
 
 router.post(
-  '/contacts',
+  '/',
   authenticate,
   jsonParser,
   validateBody(contactValidSchema),
   ctrlWrapper(createContact),
 );
 
+router.post(
+  '/photo',
+  authenticate,
+  upload.single('photo'),
+  ctrlWrapper(createContact),
+);
+
 router.patch(
-  '/contacts/:contactId',
+  '/:contactId',
   authenticate,
   jsonParser,
   isValidId,
@@ -40,8 +43,15 @@ router.patch(
   ctrlWrapper(changeContact),
 );
 
+router.patch(
+  '/:contactId/photo',
+  authenticate,
+  upload.single('photo'),
+  ctrlWrapper(changeContact),
+);
+
 router.delete(
-  '/contacts/:contactId',
+  '/:contactId',
   authenticate,
   isValidId,
   jsonParser,

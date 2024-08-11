@@ -9,6 +9,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import contacts from './routers/contacts.js';
 import authRouters from './routers/auth.js';
+import { UPLOAD_DIR } from './constants/index.js';
 
 dotenv.config();
 
@@ -38,10 +39,12 @@ const setupServer = () => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use('/auth', authRouters);
-  app.use('/', contacts);
+  app.use('/contacts', contacts);
 
   app.use(errorHandler);
   app.use(notFoundHandler);
+
+  app.use('/uploads', express.static(UPLOAD_DIR));
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
