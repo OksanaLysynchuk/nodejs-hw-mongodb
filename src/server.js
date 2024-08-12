@@ -33,18 +33,16 @@ const setupServer = () => {
     logger.info(`${req.method} ${req.url}`);
     next();
   });
-
+  app.use('/uploads', express.static(UPLOAD_DIR));
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use('/auth', authRouters);
   app.use('/contacts', contacts);
+  app.use('/auth', authRouters);
 
-  app.use(errorHandler);
   app.use(notFoundHandler);
-
-  app.use('/uploads', express.static(UPLOAD_DIR));
+  app.use(errorHandler);
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {

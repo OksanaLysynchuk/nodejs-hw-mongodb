@@ -1,14 +1,22 @@
+import cloudinaryModule from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
-import { TEMP_UPLOAD_DIR } from '../constants/index.js';
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, TEMP_UPLOAD_DIR);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now();
-    cb(null, `${uniqueSuffix}_${file.originalname}`);
+const cloudinary = cloudinaryModule.v2;
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'contacts',
+    format: async (req, file) => 'jpeg',
+    public_id: (req, file) => 'computed-filename-using-request',
   },
 });
 
-export const upload = multer({ storage });
+export const upload = multer({ storage: storage });

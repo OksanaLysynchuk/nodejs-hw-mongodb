@@ -22,31 +22,19 @@ router.get('/:contactId', authenticate, isValidId, ctrlWrapper(getContactById));
 router.post(
   '/',
   authenticate,
+  upload.single('photo'),
   jsonParser,
   validateBody(contactValidSchema),
-  ctrlWrapper(createContact),
-);
-
-router.post(
-  '/photo',
-  authenticate,
-  upload.single('photo'),
   ctrlWrapper(createContact),
 );
 
 router.patch(
   '/:contactId',
   authenticate,
+  upload.single('photo'),
   jsonParser,
   isValidId,
   validateBody(contactValidSchema),
-  ctrlWrapper(changeContact),
-);
-
-router.patch(
-  '/:contactId/photo',
-  authenticate,
-  upload.single('photo'),
   ctrlWrapper(changeContact),
 );
 
