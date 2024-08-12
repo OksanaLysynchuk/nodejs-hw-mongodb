@@ -135,11 +135,14 @@ export const sendResetEmail = async (email) => {
 };
 
 export const resetPassword = async (password, token) => {
-  let decoded;
   try {
-    decoded = jwt.verify(token, env('JWT_SECRET'));
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log(decoded);
+
     const user = await User.findOne({ _id: decoded.sub, email: decoded.email });
-    if (!user) {
+
+    if (user === null) {
       throw createHttpError(404, 'User not found');
     }
 
@@ -151,7 +154,7 @@ export const resetPassword = async (password, token) => {
       error.name === 'TokenExpiredError' ||
       error.name === 'JsonWebTokenError'
     ) {
-      throw createHttpError(401, 'Token is expired or invalid.');
+      throw createHttpError(401, 'Token not valid');
     }
 
     throw error;

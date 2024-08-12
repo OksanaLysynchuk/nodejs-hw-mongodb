@@ -56,17 +56,12 @@ export const getContactById = async (req, res, next) => {
 };
 
 export const createContact = async (req, res, next) => {
-  const contact = {
-    name: req.body.name,
-    phoneNumber: req.body.phoneNumber,
-    email: req.body.email,
-    isFavourite: req.body.isFavourite,
-    contactType: req.body.contactType,
-    userId: req.user._id,
-  };
-
   try {
-    const createdContact = await contactsService.createContact(contact);
+    const contactData = req.body;
+    if (req.file) {
+      contact.photoUrl = req.file.path;
+    }
+    const createdContact = await contactsService.createContact(contactData);
 
     res.status(201).send({
       status: 201,
@@ -74,64 +69,29 @@ export const createContact = async (req, res, next) => {
       data: createdContact,
     });
   } catch (error) {
-    next(createHttpError(500, error.message));
+    res.status(400).json({ error: error.message });
   }
 };
 
 export const changeContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const photo = req.file;
-
-  let photoUrl;
-
-  if (photo) {
-    if (env('ENABLE_CLOUDINARY') === 'true') {
-      photoUrl = await saveFileToCloudinary(photo);
-    } else {
-      photoUrl = await saveFileToUploadDir(photo);
-    }
-  }
-
   try {
-    const result = await contactsService.changeContact(contactId, {
-      ...req.body,
-      photo: photoUrl,
-    });
+    const { contactId } = req.params;
+    const contactData = req.body;
 
-    if (!result) {
-      next(createHttpError(404, 'Contact not found'));
-      return;
+    if (req.file) {
+      contactData.photoUrl = req.file.path;
     }
-    res.json({
-      status: 200,
-      message: `Successfully changed photo`,
-      data: result,
-    });
-  } catch (error) {
-    next(createHttpError(500, error.message));
-  }
-
-  const contactData = req.body;
-
-  try {
     const patchedContact = await contactsService.changeContact(
       contactId,
       contactData,
-      req.user._id,
     );
-    if (
-      !patchedContact ||
-      patchedContact.userId.toString() !== req.user._id.toString()
-    ) {
-      return next(createHttpError(404, 'Contact not found'));
-    }
     res.status(200).json({
       status: 200,
       message: 'Successfully patched a contact!',
       data: patchedContact,
     });
   } catch (error) {
-    next(createHttpError(500, error.message));
+    res.status(400).json({ error: error.message });
   }
 };
 
