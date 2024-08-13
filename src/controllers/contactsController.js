@@ -59,7 +59,7 @@ export const createContact = async (req, res, next) => {
     const contactData = req.body;
     if (req.file) {
       const result = await saveFileToCloudinary(req.file.path);
-      contactData.photoUrl = result.secure_url;
+      contactData.photo = result.secure_url;
       await fs.unlink(req.file.path);
     }
     const createdContact = await contactsService.createContact(contactData);
@@ -81,7 +81,7 @@ export const changeContact = async (req, res, next) => {
 
     if (req.file) {
       const result = await saveFileToCloudinary(req.file.path);
-      contactData.photoUrl = result.secure_url;
+      contactData.photo = result.secure_url;
       await fs.unlink(req.file.path);
     }
     const patchedContact = await contactsService.changeContact(
