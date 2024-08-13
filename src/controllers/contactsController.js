@@ -92,18 +92,18 @@ export const changeContact = async (req, res, next) => {
     const patchedContact = await contactsService.changeContact(
       contactId,
       contactData,
+      req.user._id,
     );
+    if (!patchedContact) {
+      return next(createHttpError(404, 'Contact not found'));
+    }
     res.status(200).json({
       status: 200,
       message: 'Successfully patched a contact!',
       data: patchedContact,
     });
   } catch (error) {
-    res.status(400).json({
-      status: 400,
-      message: 'Error updating contact',
-      error: error.message,
-    });
+    next(error);
   }
 };
 
