@@ -99,7 +99,7 @@ export const refreshUserSession = async ({ sessionId, refreshToken }) => {
 };
 
 export const sendResetEmail = async (email) => {
-  const user = User.findOne({ email });
+  const user = await User.findOne({ email });
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
@@ -136,9 +136,7 @@ export const sendResetEmail = async (email) => {
 
 export const resetPassword = async (password, token) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    console.log(decoded);
+    const decoded = jwt.verify(token, env('JWT_SECRET'));
 
     const user = await User.findOne({ _id: decoded.sub, email: decoded.email });
 

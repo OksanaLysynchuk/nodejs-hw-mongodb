@@ -109,10 +109,6 @@ export const resetPasswordController = async (req, res, next) => {
       data: {},
     });
   } catch (error) {
-    res.status(500).json({
-      status: 500,
-      message: 'Error resetting password',
-      error: error.message,
-    });
+    next(error);
   }
 };
