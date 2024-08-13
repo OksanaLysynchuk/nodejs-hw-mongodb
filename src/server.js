@@ -38,8 +38,8 @@ const setupServer = () => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use('/contacts', contacts);
-  app.use('/auth', authRouters);
+  app.use('/', contacts);
+  app.use('/', authRouters);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

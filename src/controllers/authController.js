@@ -89,7 +89,11 @@ export const sendResetEmailController = async (req, res) => {
       data: {},
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      status: 500,
+      message: 'Error sending reset email',
+      error: error.message,
+    });
   }
 };
 
@@ -105,6 +109,10 @@ export const resetPasswordController = async (req, res, next) => {
       data: {},
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      status: 500,
+      message: 'Error resetting password',
+      error: error.message,
+    });
   }
 };
