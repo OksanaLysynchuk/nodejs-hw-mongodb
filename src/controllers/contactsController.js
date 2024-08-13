@@ -7,7 +7,6 @@ import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { env } from '../utils/env.js';
 import * as fs from 'node:fs/promises';
-import { error, log } from 'node:console';
 
 export const getContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -71,11 +70,7 @@ export const createContact = async (req, res, next) => {
       data: createdContact,
     });
   } catch (error) {
-    res.status(400).json({
-      status: 400,
-      message: 'Error creating contact',
-      error: error.message,
-    });
+    next(createHttpError(400, 'Error creating contact with photo'));
   }
 };
 

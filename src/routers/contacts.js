@@ -5,6 +5,7 @@ import {
   createContact,
   changeContact,
   deleteContact,
+  uploadPhoto,
 } from '../controllers/contactsController.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { contactValidSchema } from '../validations/contactsValidation.js';
