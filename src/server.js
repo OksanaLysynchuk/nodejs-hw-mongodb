@@ -39,7 +39,7 @@ const setupServer = () => {
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use('/', contacts);
-  app.use('/', authRouters);
+  app.use('/auth', authRouters);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

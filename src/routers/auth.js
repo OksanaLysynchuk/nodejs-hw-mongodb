@@ -20,32 +20,32 @@ const router = express.Router();
 const jsonParser = express.json();
 
 router.post(
-  '/auth/register',
+  '/register',
   jsonParser,
   validateBody(registerSchema),
   ctrlWrapper(register),
 );
 
 router.post(
-  '/auth/login',
+  '/login',
   jsonParser,
   validateBody(loginSchema),
   ctrlWrapper(login),
 );
 
-router.post('/auth/logout', jsonParser, ctrlWrapper(logout));
+router.post('/logout', jsonParser, ctrlWrapper(logout));
 
-router.post('/auth/refresh', jsonParser, ctrlWrapper(refresh));
+router.post('/refresh', jsonParser, ctrlWrapper(refresh));
 
 router.post(
-  '/auth/send-reset-email',
+  '/send-reset-email',
   jsonParser,
   validateBody(sendResetEmailSchema),
   ctrlWrapper(sendResetEmailController),
 );
 
 router.post(
-  '/auth/reset-pwd',
+  '/reset-pwd',
   jsonParser,
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController),
