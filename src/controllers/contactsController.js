@@ -59,7 +59,9 @@ export const createContact = async (req, res, next) => {
   try {
     const contactData = req.body;
     if (req.file) {
-      contact.photoUrl = req.file.path;
+      const result = await saveFileToCloudinary(req.file.path);
+      contactData.photoUrl = result.secure_url;
+      await fs.unlink(req.file.path);
     }
     const createdContact = await contactsService.createContact(contactData);
 
@@ -69,7 +71,11 @@ export const createContact = async (req, res, next) => {
       data: createdContact,
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({
+      status: 400,
+      message: 'Error creating contact',
+      error: error.message,
+    });
   }
 };
 
@@ -79,7 +85,9 @@ export const changeContact = async (req, res, next) => {
     const contactData = req.body;
 
     if (req.file) {
-      contactData.photoUrl = req.file.path;
+      const result = await saveFileToCloudinary(req.file.path);
+      contactData.photoUrl = result.secure_url;
+      await fs.unlink(req.file.path);
     }
     const patchedContact = await contactsService.changeContact(
       contactId,
@@ -91,7 +99,11 @@ export const changeContact = async (req, res, next) => {
       data: patchedContact,
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({
+      status: 400,
+      message: 'Error updating contact',
+      error: error.message,
+    });
   }
 };
 
