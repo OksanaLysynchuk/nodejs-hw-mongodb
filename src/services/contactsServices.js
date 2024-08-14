@@ -54,10 +54,14 @@ export const createContact = (contact) => {
   return Contact.create(contact);
 };
 
-export const changeContact = (contactId, patchedContact, userId) => {
-  return Contact.findOneAndUpdate({ _id: contactId, userId }, patchedContact, {
-    new: true,
-  });
+export const changeContact = (contactId, patchedContact) => {
+  return Contact.findOneAndUpdate(
+    { _id: contactId, userId: patchedContact.userId },
+    patchedContact,
+    {
+      new: true,
+    },
+  );
 };
 
 export const deleteContact = (contactId, userId) => {

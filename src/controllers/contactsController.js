@@ -62,6 +62,9 @@ export const createContact = async (req, res, next) => {
       contactData.photo = result.secure_url;
       await fs.unlink(req.file.path);
     }
+
+    contactData.userId = req.user._id;
+
     const createdContact = await contactsService.createContact(contactData);
 
     res.status(201).send({
@@ -70,7 +73,9 @@ export const createContact = async (req, res, next) => {
       data: createdContact,
     });
   } catch (error) {
-    next(createHttpError(400, 'Error creating contact with photo'));
+    next(
+      createHttpError(400, 'Error creating contact with photo', error.message),
+    );
   }
 };
 
@@ -84,10 +89,12 @@ export const changeContact = async (req, res, next) => {
       contactData.photo = result.secure_url;
       await fs.unlink(req.file.path);
     }
+
+    contactData.userId = req.user._id;
+
     const patchedContact = await contactsService.changeContact(
       contactId,
       contactData,
-      req.user._id,
     );
     if (!patchedContact) {
       return next(createHttpError(404, 'Contact not found'));
@@ -98,7 +105,9 @@ export const changeContact = async (req, res, next) => {
       data: patchedContact,
     });
   } catch (error) {
-    next(error);
+    next(
+      createHttpError(400, 'Error creating contact with photo', error.message),
+    );
   }
 };
 
