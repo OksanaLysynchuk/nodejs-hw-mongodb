@@ -5,9 +5,10 @@ import multer from 'multer';
 const cloudinary = cloudinaryModule.v2;
 
 cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  CLOUD_NAME: process.env.CLOUD_NAME,
+  API_KEY: process.env.CLOUDINARY_API_KEY,
+  API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  URL: process.env.CLOUDINARY_URL,
 });
 
 const storage = new CloudinaryStorage({
