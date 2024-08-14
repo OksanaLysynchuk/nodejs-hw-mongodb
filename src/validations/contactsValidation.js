@@ -24,7 +24,6 @@ export const contactValidSchema = Joi.object({
       'any.required': 'Type is required',
     }),
   photo: Joi.string()
-    .Joi.string()
     .regex(/\.(jpg|jpeg|png)$/)
     .message('Photo must be in jpg, jpeg, or png format')
     .uri()
