@@ -1,11 +1,10 @@
 import createHttpError from 'http-errors';
 import * as contactsService from '../services/contactsServices.js';
-import { contactValidSchema } from '../validations/contactsValidation.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
-import { env } from '../utils/env.js';
+
 import * as fs from 'node:fs/promises';
 
 export const getContacts = async (req, res) => {
@@ -54,16 +53,105 @@ export const getContactById = async (req, res, next) => {
   }
 };
 
-export const createContact = async (req, res, next) => {
-  try {
-    const contactData = req.body;
-    if (req.file) {
-      const result = await saveFileToCloudinary(req.file.path);
-      contactData.photo = result.secure_url;
-      await fs.unlink(req.file.path);
-    }
+// export const createContact = async (req, res, next) => {
+//   try {
+//     const contactData = req.body;
+//     if (req.file) {
+//       const result = await saveFileToCloudinary(req.file.path);
+//       contactData.photo = result.secure_url;
+//       await fs.unlink(req.file.path);
+//     }
 
-    contactData.userId = req.user._id;
+//     contactData.userId = req.user._id;
+
+//     const createdContact = await contactsService.createContact(contactData);
+
+//     res.status(201).send({
+//       status: 201,
+//       message: 'Successfully created a contact!',
+//       data: createdContact,
+//     });
+//   } catch (error) {
+//     next(
+//       createHttpError(400, 'Error creating contact with photo', error.message),
+//     );
+//   }
+// };
+
+// Створення контакту
+console.log();
+
+//------------------------------------------------------
+// export const createContact = async (req, res, next) => {
+//   try {
+//     // const { _id: userId } = req.user; // Отримуємо userId з об'єкта користувача
+//     console.log('req.user:', req.user);
+//     const userId = req.user?._id;
+//     if (!userId) {
+//       throw new createHttpError(400, 'User ID is missing');
+//     }
+//     console.log('User ID:', userId);
+//     console.log('req.user:', req.user);
+//     console.log('Request Body:', req.body);
+//     const { file } = req;
+//     const photoUrl = file ? file.path : null;
+
+//     console.log('Creating contact with data:', { ...req.body, photoUrl });
+
+//     const contactData = {
+//       userId,
+//       name: req.body.name,
+//       email: req.body.email,
+//       phoneNumber: req.body.phoneNumber,
+//       isFavourite: req.body.isFavourite || false,
+//       contactType: req.body.contactType,
+//       photo: photoUrl, // Перевірте, чи це поле називається photo у схемі
+//     };
+
+//     console.log('Contact before saving:', contact);
+
+//     const createdContact = await contactsService.createContact(contactData);
+
+//     res.status(201).json({
+//       status: 201,
+//       message: 'Successfully created a contact!',
+//       data: createdContact,
+//     });
+//   } catch (error) {
+//     console.error('Error creating contact:', error);
+//     next(
+//       createHttpError(500, 'Error creating contact with photo', error.message),
+//     );
+//   }
+// };
+
+export const createContact = async (req, res, next) => {
+  const userId = req.user?._id;
+  console.log('User ID from req.user:', userId);
+
+  if (!userId) {
+    return next(createHttpError(400, 'User ID is missing'));
+  }
+
+  try {
+    const { file } = req;
+    const photoUrl = file ? file.path : null;
+
+    console.log('Creating contact with data:', {
+      ...req.body,
+      userId,
+      photoUrl,
+    });
+
+    const contactData = {
+      userId,
+      name: req.body.name,
+      email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
+      isFavourite: req.body.isFavourite || false,
+      contactType: req.body.contactType,
+      photoUrl: photoUrl,
+    };
 
     const createdContact = await contactsService.createContact(contactData);
 
@@ -73,6 +161,7 @@ export const createContact = async (req, res, next) => {
       data: createdContact,
     });
   } catch (error) {
+    console.error('Error creating contact:', error);
     next(
       createHttpError(400, 'Error creating contact with photo', error.message),
     );

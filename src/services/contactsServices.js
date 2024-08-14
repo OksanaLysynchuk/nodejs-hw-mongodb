@@ -1,4 +1,4 @@
-import { Contact } from '../db/models/contactModel.js';
+import Contact from '../db/models/contactModel.js';
 
 export const getContacts = async ({
   page,
@@ -51,6 +51,8 @@ export const getContactById = (contactId, userId) => {
 };
 
 export const createContact = (contact) => {
+  console.log('Creating contact with:', contact);
+  console.log('User ID:', contact.userId);
   return Contact.create(contact);
 };
 
