@@ -1,39 +1,50 @@
+// import mongoose from 'mongoose';
+
+// const contactSchema = new mongoose.Schema(
+//   {
+//     userId: {
+//       type: mongoose.Schema.Types.ObjectId,
+//       ref: 'User',
+//       required: true,
+//     },
+//     name: { type: String, required: true },
+//     email: { type: String, required: true },
+//     phoneNumber: { type: String },
+//     isFavourite: { type: Boolean, default: false },
+//     contactType: { type: String },
+//     photo: { type: String },
+//   },
+//   {
+//     timestamps: true,
+//     versionKey: false,
+//   },
+// );
+
+// const Contact = mongoose.model('Contact', contactSchema);
+
+// export default Contact;
+
 import mongoose from 'mongoose';
 
 const contactSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: [true, 'Name is required'],
-    },
-    email: {
-      type: String,
-      required: [true, 'Email is required'],
-    },
-    phoneNumber: {
-      type: String,
-      required: [true, 'Phone is required'],
-    },
-    isFavourite: {
-      type: Boolean,
-      default: false,
-    },
-    contactType: {
-      type: String,
-      enum: ['work', 'home', 'personal'],
-      required: true,
-      default: 'personal',
-    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: 'User',
     },
-    photo: { type: String },
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phoneNumber: { type: String },
+    isFavourite: { type: Boolean, default: false },
+    contactType: { type: String },
+    photoUrl: { type: String },
   },
   {
     timestamps: true,
-    versionKey: false,
   },
 );
 
-export const Contact = mongoose.model('Contact', contactSchema);
+const Contact = mongoose.model('Contact', contactSchema);
+
+export default Contact;

@@ -13,8 +13,6 @@ const initMongoConnection = async () => {
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useFindAndModify: false,
-        useCreateIndex: true,
       },
     );
     console.log('Mongo connection successfully established!');
