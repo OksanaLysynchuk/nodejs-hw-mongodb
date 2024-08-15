@@ -65,6 +65,15 @@ export const changeContact = (contactId, patchedContact) => {
     },
   );
 };
+export const deleteLocalFile = async (filePath) => {
+  try {
+    await fs.access(filePath);
+
+    await fs.unlink(filePath);
+  } catch (error) {
+    console.error('File not found for unlink:', error);
+  }
+};
 
 export const deleteContact = (contactId, userId) => {
   return Contact.findOneAndDelete({ _id: contactId, userId });
