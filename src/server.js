@@ -17,13 +17,11 @@ const setupServer = () => {
   const app = express();
   const logger = pino();
 
-  // Логування запитів
   app.use((req, res, next) => {
     logger.info(`Incoming request: ${req.method} ${req.url}`);
     next();
   });
 
-  // Логування відповіді
   app.use((req, res, next) => {
     const originalSend = res.send;
     res.send = function (body) {

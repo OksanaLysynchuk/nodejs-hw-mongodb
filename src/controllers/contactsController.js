@@ -5,8 +5,6 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
-import * as fs from 'node:fs/promises';
-
 export const getContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
@@ -53,107 +51,30 @@ export const getContactById = async (req, res, next) => {
   }
 };
 
-// export const createContact = async (req, res, next) => {
-//   try {
-//     const contactData = req.body;
-//     if (req.file) {
-//       const result = await saveFileToCloudinary(req.file.path);
-//       contactData.photo = result.secure_url;
-//       await fs.unlink(req.file.path);
-//     }
-
-//     contactData.userId = req.user._id;
-
-//     const createdContact = await contactsService.createContact(contactData);
-
-//     res.status(201).send({
-//       status: 201,
-//       message: 'Successfully created a contact!',
-//       data: createdContact,
-//     });
-//   } catch (error) {
-//     next(
-//       createHttpError(400, 'Error creating contact with photo', error.message),
-//     );
-//   }
-// };
-
-// Створення контакту
-console.log();
-
-//------------------------------------------------------
-// export const createContact = async (req, res, next) => {
-//   try {
-//     // const { _id: userId } = req.user; // Отримуємо userId з об'єкта користувача
-//     console.log('req.user:', req.user);
-//     const userId = req.user?._id;
-//     if (!userId) {
-//       throw new createHttpError(400, 'User ID is missing');
-//     }
-//     console.log('User ID:', userId);
-//     console.log('req.user:', req.user);
-//     console.log('Request Body:', req.body);
-//     const { file } = req;
-//     const photoUrl = file ? file.path : null;
-
-//     console.log('Creating contact with data:', { ...req.body, photoUrl });
-
-//     const contactData = {
-//       userId,
-//       name: req.body.name,
-//       email: req.body.email,
-//       phoneNumber: req.body.phoneNumber,
-//       isFavourite: req.body.isFavourite || false,
-//       contactType: req.body.contactType,
-//       photo: photoUrl, // Перевірте, чи це поле називається photo у схемі
-//     };
-
-//     console.log('Contact before saving:', contact);
-
-//     const createdContact = await contactsService.createContact(contactData);
-
-//     res.status(201).json({
-//       status: 201,
-//       message: 'Successfully created a contact!',
-//       data: createdContact,
-//     });
-//   } catch (error) {
-//     console.error('Error creating contact:', error);
-//     next(
-//       createHttpError(500, 'Error creating contact with photo', error.message),
-//     );
-//   }
-// };
-
 export const createContact = async (req, res, next) => {
-  const userId = req.user?._id;
-  console.log('User ID from req.user:', userId);
-
-  if (!userId) {
-    return next(createHttpError(400, 'User ID is missing'));
-  }
-
   try {
-    const { file } = req;
-    const photoUrl = file ? file.path : null;
+    const contactData = { ...req.body };
+    console.log('Request body:', req.body);
+    console.log('Uploaded file:', req.file);
 
-    console.log('Creating contact with data:', {
-      ...req.body,
-      userId,
-      photoUrl,
-    });
+    if (!req.user || !req.user._id) {
+      return next(createHttpError(400, 'User ID is missing'));
+    }
 
-    const contactData = {
-      userId,
-      name: req.body.name,
-      email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
-      isFavourite: req.body.isFavourite || false,
-      contactType: req.body.contactType,
-      photoUrl: photoUrl,
-    };
+    contactData.userId = req.user._id;
+    console.log('Contact data before file processing:', contactData);
+
+    if (req.file) {
+      const result = await saveFileToCloudinary(req.file.path);
+      console.log('Cloudinary upload result:', result);
+
+      contactData.photo = result.secure_url;
+    }
+
+    console.log('Contact data after file processing:', contactData);
 
     const createdContact = await contactsService.createContact(contactData);
+    console.log('Created contact:', createdContact);
 
     res.status(201).send({
       status: 201,
@@ -163,7 +84,9 @@ export const createContact = async (req, res, next) => {
   } catch (error) {
     console.error('Error creating contact:', error);
     next(
-      createHttpError(400, 'Error creating contact with photo', error.message),
+      createHttpError(400, 'Error creating contact with photo', {
+        cause: error,
+      }),
     );
   }
 };
@@ -176,7 +99,7 @@ export const changeContact = async (req, res, next) => {
     if (req.file) {
       const result = await saveFileToCloudinary(req.file.path);
       contactData.photo = result.secure_url;
-      await fs.unlink(req.file.path);
+      await contactsService.deleteLocalFile(req.file.path);
     }
 
     contactData.userId = req.user._id;
@@ -188,14 +111,18 @@ export const changeContact = async (req, res, next) => {
     if (!patchedContact) {
       return next(createHttpError(404, 'Contact not found'));
     }
+
     res.status(200).json({
       status: 200,
       message: 'Successfully patched a contact!',
       data: patchedContact,
     });
   } catch (error) {
+    console.error('Error updating contact:', error);
     next(
-      createHttpError(400, 'Error creating contact with photo', error.message),
+      createHttpError(400, 'Error updating contact with photo', {
+        cause: error,
+      }),
     );
   }
 };
