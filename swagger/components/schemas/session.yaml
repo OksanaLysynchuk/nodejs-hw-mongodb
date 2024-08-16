@@ -1,0 +1,22 @@
+type: object
+properties:
+  accessToken:
+    type: string
+    example: NP/sNI19dXsUSZEWZ4+34hDm6saIj+bQTmPkJU4W
+  refreshToken:
+    type: string
+    example: 7FJ59FFds23LD21sl9Gv0aT1TJG92KFa
+  accessTokenValidUntil:
+    type: string
+    format: date-time
+    example: 2024-08-16T00:00:00Z
+  refreshTokenValidUntil:
+    type: string
+    format: date-time
+    example: 2024-08-17T00:00:00Z
+required:
+  - userId
+  - accessToken
+  - refreshToken
+  - accessTokenValidUntil
+  - refreshTokenValidUntil

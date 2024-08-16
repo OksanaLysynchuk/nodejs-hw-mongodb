@@ -10,6 +10,7 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import contacts from './routers/contacts.js';
 import authRouters from './routers/auth.js';
 import { UPLOAD_DIR } from './constants/index.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ const setupServer = () => {
   });
 
   app.use('/uploads', express.static(UPLOAD_DIR));
+  app.use('/api-docs', swaggerDocs());
 
   app.use(express.json());
   app.use(bodyParser.json());
