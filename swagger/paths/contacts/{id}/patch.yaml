@@ -1,0 +1,80 @@
+tags:
+  - Contacts
+summary: Update a contact by ID
+operationId: updateContactById
+description: Update the details of a specific contact using their ID. Supports partial updates.
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+      example: 66950323c655edd32d24421d
+requestBody:
+  required: true
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - email
+          - phoneNumber
+          - isFavourite
+          - contactType
+          - photo
+        properties:
+          name:
+            description: 'Name of the contact'
+            type: string
+            example: 'John Doe'
+          email:
+            description: "Contact's email"
+            type: string
+            example: 'johndoe@example.com'
+          phoneNumber:
+            description: "Contact's phone number"
+            type: string
+            example: '+380000000045'
+          isFavourite:
+            description: 'Indicate wheather the contact is favourite'
+            type: boolean
+            example: true
+            default: false
+          contactType:
+            description: 'Indicate the type of the contact'
+            type: string
+            enum: ['work', 'home', 'personal']
+            example: 'work'
+          photo:
+            description: "Contact's photo"
+            type: string
+            format: binary
+            example: 'https://res.cloudinary.com/dcdc5je8y/image/upload/v1723806175/onj4g57e5az5cwilaykh.jpg or photo.jpg'
+responses:
+  '200':
+    description: Update the details of a specific contact using their ID. Supports partial updates.
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully patched a contact!'
+            data:
+              type: object
+              $ref: ../../../components/schemas/contact.yaml
+  '400':
+    $ref: ../../../components/responses/400.yaml
+  '404':
+    $ref: ../../../components/responses/404.yaml
