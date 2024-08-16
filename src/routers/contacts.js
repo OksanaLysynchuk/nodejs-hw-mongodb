@@ -7,7 +7,10 @@ import {
   deleteContact,
 } from '../controllers/contactsController.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { contactValidSchema } from '../validations/contactsValidation.js';
+import {
+  contactValidSchema,
+  patchContactSchema,
+} from '../validations/contactsValidation.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
@@ -32,7 +35,7 @@ router.patch(
   '/:contactId',
   upload.single('photo'),
   isValidId,
-  validateBody(contactValidSchema),
+  validateBody(patchContactSchema),
   ctrlWrapper(changeContact),
 );
 
