@@ -26,3 +26,12 @@ export const contactValidSchema = Joi.object({
 
   photo: Joi.string(),
 });
+
+export const patchContactSchema = Joi.object({
+  name: Joi.string().optional(),
+  email: Joi.string().email().optional(),
+  phoneNumber: Joi.string().optional(),
+  isFavourite: Joi.boolean().optional(),
+  contactType: Joi.string().optional(),
+  photo: Joi.string().optional(),
+}).min(1);

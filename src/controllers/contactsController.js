@@ -93,13 +93,24 @@ export const createContact = async (req, res, next) => {
 
 export const changeContact = async (req, res, next) => {
   try {
+    console.log('Request Body:', req.body);
+    console.log('File:', req.file);
+
     const { contactId } = req.params;
     const contactData = req.body;
 
     if (req.file) {
+      console.log('File Path:', req.file.path);
       const result = await saveFileToCloudinary(req.file.path);
       contactData.photo = result.secure_url;
-      await contactsService.deleteLocalFile(req.file.path);
+
+      if (req.file && req.file.path.startsWith('http')) {
+        console.log(
+          'Skipping local file deletion as the file is hosted externally.',
+        );
+      } else {
+        await contactsService.deleteLocalFile(req.file.path);
+      }
     }
 
     contactData.userId = req.user._id;
@@ -108,6 +119,7 @@ export const changeContact = async (req, res, next) => {
       contactId,
       contactData,
     );
+
     if (!patchedContact) {
       return next(createHttpError(404, 'Contact not found'));
     }

@@ -1,4 +1,5 @@
 import Contact from '../db/models/contactModel.js';
+import * as fs from 'fs/promises';
 
 export const getContacts = async ({
   page,
@@ -56,23 +57,20 @@ export const createContact = (contact) => {
   return Contact.create(contact);
 };
 
-export const changeContact = (contactId, patchedContact) => {
-  return Contact.findOneAndUpdate(
-    { _id: contactId, userId: patchedContact.userId },
-    patchedContact,
-    {
-      new: true,
-    },
-  );
+export const changeContact = async (contactId, contactData) => {
+  return Contact.findByIdAndUpdate(contactId, contactData, { new: true });
 };
-export const deleteLocalFile = async (filePath) => {
-  try {
-    await fs.access(filePath);
 
-    await fs.unlink(filePath);
-  } catch (error) {
-    console.error('File not found for unlink:', error);
-  }
+export const deleteLocalFile = (filePath) => {
+  return new Promise((resolve, reject) => {
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
 };
 
 export const deleteContact = (contactId, userId) => {
