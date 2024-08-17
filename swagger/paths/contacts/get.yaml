@@ -1,5 +1,5 @@
 tags:
-  - Conatcts
+  - Contacts
 summary: Get all contacts
 operationId: getAllContacts
 description: 'Get all contacts'
@@ -8,13 +8,12 @@ security:
 parameters:
   - in: query
     name: page
-    required: true
     schema:
       type: integer
       default: 1
     description: The page number to retrieve.
   - in: query
-    name: limit
+    name: perPage
     schema:
       type: integer
       default: 10
@@ -25,13 +24,20 @@ parameters:
       type: string
     description: The field by which to sort the results.
   - in: query
-    name: filter
+    name: sortOrder
     schema:
       type: string
-    description: Filter contacts by specific fields (e.g., name, email).
+      enum: [asc, desc]
+      default: asc
+    description: The order in which to sort the results.
+  - in: query
+    name: isFavourite
+    schema:
+      type: boolean
+    description: Filter contacts by favourite status.
 responses:
   '200':
-    description: 'Get all contacts'
+    description: 'Contacts retrieved successfully'
     content:
       application/json:
         schema:
@@ -49,6 +55,28 @@ responses:
               example: 'Contacts retrieved successfully'
             data:
               type: object
-              $ref: ../../components/schemas/contact.yaml
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: ../../components/schemas/contact.yaml
+                page:
+                  type: integer
+                  example: 1
+                perPage:
+                  type: integer
+                  example: 10
+                totalItems:
+                  type: integer
+                  example: 100
+                totalPages:
+                  type: integer
+                  example: 10
+                hasPreviousPage:
+                  type: boolean
+                  example: false
+                hasNextPage:
+                  type: boolean
+                  example: true
   '404':
     $ref: ../../components/responses/404.yaml

@@ -7,7 +7,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: This is the documentation of contacts app
 tags:
-  - name: Conatcts
+  - name: Contacts
     description: Operations about contacts.
   - name: Auth
     description: Auth operations about users.

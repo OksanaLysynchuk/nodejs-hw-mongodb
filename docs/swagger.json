@@ -19,7 +19,7 @@
   ],
   "tags": [
     {
-      "name": "Conatcts",
+      "name": "Contacts",
       "description": "Operations about contacts."
     },
     {
@@ -116,14 +116,6 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "email",
-                  "phoneNumber",
-                  "isFavourite",
-                  "contactType",
-                  "photo"
-                ],
                 "properties": {
                   "name": {
                     "description": "Name of the contact",
@@ -244,7 +236,7 @@
     "/contacts": {
       "get": {
         "tags": [
-          "Conatcts"
+          "Contacts"
         ],
         "summary": "Get all contacts",
         "operationId": "getAllContacts",
@@ -258,7 +250,6 @@
           {
             "in": "query",
             "name": "page",
-            "required": true,
             "schema": {
               "type": "integer",
               "default": 1
@@ -267,7 +258,7 @@
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "perPage",
             "schema": {
               "type": "integer",
               "default": 10
@@ -284,16 +275,29 @@
           },
           {
             "in": "query",
-            "name": "filter",
+            "name": "sortOrder",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "asc"
             },
-            "description": "Filter contacts by specific fields (e.g., name, email)."
+            "description": "The order in which to sort the results."
+          },
+          {
+            "in": "query",
+            "name": "isFavourite",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filter contacts by favourite status."
           }
         ],
         "responses": {
           "200": {
-            "description": "Get all contacts",
+            "description": "Contacts retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -314,7 +318,38 @@
                     },
                     "data": {
                       "type": "object",
-                      "$ref": "#/components/schemas/contact"
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/contact"
+                          }
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "perPage": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "totalItems": {
+                          "type": "integer",
+                          "example": 100
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 10
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      }
                     }
                   }
                 }
@@ -347,9 +382,7 @@
                   "name",
                   "email",
                   "phoneNumber",
-                  "isFavourite",
-                  "contactType",
-                  "photo"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
