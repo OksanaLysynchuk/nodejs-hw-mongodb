@@ -13,8 +13,10 @@ requestBody:
         properties:
           password:
             type: string
+            example: '123456789'
           token:
             type: string
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NmJiMzZmYTEwNTg1MDAwNjgzYTIxY2QiLCJlbWFpbCI6Im9rc2FuYWx5c3luY2h1a0BnbWFpbC5jb20iLCJpYXQiOjE3MjM4MjkzNzgsImV4cCI6MTcyMzgzMDI3OH0.wn5kkcVvF6urFo8bVRYc91biar9cMXYovfcKT54TJD4'
         required:
           - password
           - token

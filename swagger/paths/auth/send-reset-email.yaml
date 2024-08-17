@@ -13,6 +13,7 @@ requestBody:
         properties:
           email:
             type: string
+            example: 'johndoe@example.com'
         required:
           - email
 responses:
